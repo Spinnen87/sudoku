@@ -105,11 +105,44 @@ module.exports = function solveSudoku(matrix) {
     }
   }
 
-  for (let index = 0; index < 9; index++) {
-    onlyOneZeroInCol(index);
-    onlyOneZeroInRow(index);
+  //for easy sudoku - only one zero in row or col
+    for (let index = 0; index < 9; index++) {
+      onlyOneZeroInCol(index);
+      onlyOneZeroInRow(index);
+    }
+   
+
+  let arrZero = [];
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (matrix[r][c] == 0) {
+        arrZero.push([r, c]);
+      }
+    }
+  }
+
+  let i = 0;
+  while (i < arrZero.length) {
+    let row = arrZero[i][0];
+    let col = arrZero[i][1];
+    let value = matrix[row][col]+1;
+    let f = false;
+
+    while(f==false && value <= 9){
+      if (validCol(col, value) && validRow(row, value) && validBlock(row, col, value)) {
+        matrix[row][col] = value;
+        f = true;
+        i++;
+      }
+      value++;
+    }
+
+    if (f==false) {
+      matrix[row][col] = 0;
+      i--;
+    }
   }
 
   return matrix;
-
+  
 };
